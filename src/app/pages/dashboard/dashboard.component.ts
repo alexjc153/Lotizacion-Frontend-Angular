@@ -11,17 +11,17 @@ export class DashboardComponent implements OnInit {
 
   // tslint:disable-next-line: variable-name
   constructor( 
-    public _usuarioService: UsuarioService,
-    public _perfilService: PerfilService ) { }
+    public usuarioService: UsuarioService,
+    public perfilService: PerfilService ) { }
 
   totalUsuarios: number;
   totalPerfiles: number;
 
 
   ngOnInit(): void {
-    this._usuarioService.cargarUsuarios().subscribe((resp: any) => {
+    this.usuarioService.cargarUsuarios().subscribe((resp: any) => {
       this.totalUsuarios = resp.total; });
-    this._perfilService.cargarPerfiles().subscribe((resp: any) => {
+    this.perfilService.cargarPerfiles().subscribe((resp: any) => {
         this.totalPerfiles = resp.total; });
   }
 

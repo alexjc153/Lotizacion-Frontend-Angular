@@ -13,14 +13,14 @@ export class HeaderComponent implements OnInit {
   // tslint:disable-next-line: variable-name
   constructor( 
     // tslint:disable-next-line: variable-name
-    public _usuarioService: UsuarioService,
+    public usuarioService: UsuarioService,
     public router: Router,
     ) { }
 
   usuario: Usuario;
 
   ngOnInit(): void {
-    this.usuario = this._usuarioService.usuario;
+    this.usuario = this.usuarioService.usuario;
   }
 
   buscar(termino: string){

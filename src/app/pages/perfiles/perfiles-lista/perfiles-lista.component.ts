@@ -1,16 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { PerfilComponent } from './perfil.component';
-import { PerfilService } from '../../services/perfil/perfil.service';
-import { Perfil } from 'src/app/models/perfil.model';
+
+
 import Swal from 'sweetalert2';
 import { Router, NavigationEnd } from '@angular/router';
+import { Perfil } from '../../../models/perfil.model';
+import { PerfilService } from '../../../services/perfil/perfil.service';
+import { PerfilComponent } from '../perfil-form/perfil-form.component';
+
+
 
 @Component({
   selector: 'app-perfiles',
-  templateUrl: './perfiles.component.html',
-  styleUrls: ['./perfiles.component.css']
+  templateUrl: './perfiles-lista.component.html',
+  styleUrls: ['./perfiles-lista.component.css']
 })
+
 export class PerfilesComponent implements OnInit {
 
   cargando = false;
@@ -23,11 +28,11 @@ export class PerfilesComponent implements OnInit {
   constructor(
     private modalService: NgbModal,
     // tslint:disable-next-line: variable-name
-    public _perfilService: PerfilService,
+    public perfilService: PerfilService,
     public router: Router,
     ) {
       this.cargarPerfiles();
-      this.perfil = _perfilService.perfil;
+      this.perfil = perfilService.perfil;
 
       // Refresh ventana al guardar registro desde Modal
       // tslint:disable-next-line: only-arrow-functions
@@ -72,7 +77,7 @@ export class PerfilesComponent implements OnInit {
 
   cargarPerfiles() {
     this.cargando = true;
-    this._perfilService.cargarPerfiles()
+    this.perfilService.cargarPerfiles()
     .subscribe( (resp: any) => {
       this.totalRegistros = resp.total;
       this.perfiles = resp.perfiles;
@@ -92,7 +97,7 @@ export class PerfilesComponent implements OnInit {
       cancelButtonText: 'Cancelar'
     }).then((borrar) => {
       if (borrar.value) {
-        this._perfilService.borrarPerfil(perfil._id).subscribe(() => this.cargarPerfiles());
+        this.perfilService.borrarPerfil(perfil._id).subscribe(() => this.cargarPerfiles());
       }
     });
   }
@@ -106,7 +111,7 @@ export class PerfilesComponent implements OnInit {
 
     this.cargando = true;
 
-    this._perfilService.buscarPerfiles(termino)
+    this.perfilService.buscarPerfiles(termino)
     .subscribe((perfiles: Perfil[]) => {
 
       this.perfiles = perfiles;

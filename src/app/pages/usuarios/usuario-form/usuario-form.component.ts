@@ -1,19 +1,21 @@
 import { Component, OnInit } from '@angular/core';
-import { Perfil } from '../../models/perfil.model';
-import { UsuarioService } from '../../services/service.index';
-import { PerfilService } from '../../services/service.index';
+
+import { Usuario } from '../../../models/usuario.model';
+import { Perfil } from '../../../models/perfil.model';
+
 import { FormGroup, Validators, FormBuilder} from '@angular/forms';
-import { Usuario } from '../../models/usuario.model';
+
+import { UsuarioService, PerfilService } from '../../../services/service.index';
+
 import { Router } from '@angular/router';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { ValidadoresService } from '../../services/validaciones/validadores.service';
-import { ModalUploadService } from 'src/app/components/modal-upload/modal-upload.service';
 
-
+import { ValidadoresService } from '../../../services/validaciones/validadores.service';
+import { ModalUploadService } from '../../../components/modal-upload/modal-upload.service';
 
 @Component({
   selector: 'app-usuario',
-  templateUrl: './usuario.component.html',
+  templateUrl: './usuario-form.component.html',
   styles: []
 })
 
@@ -30,12 +32,9 @@ export class UsuarioComponent implements OnInit {
     private fb: FormBuilder,
     public activeModal: NgbActiveModal,
     public router: Router,
-    // tslint:disable-next-line: variable-name
-    public _usuarioService: UsuarioService,
-    // tslint:disable-next-line: variable-name
-    public _perfilService: PerfilService,
-    // tslint:disable-next-line: variable-name
-    public _modalUploadService: ModalUploadService,
+    public usuarioService: UsuarioService,
+    public perfilService: PerfilService,
+    public modalUploadService: ModalUploadService,
     public validadores: ValidadoresService
   ) {
     this.crearFormulario();
@@ -45,12 +44,12 @@ export class UsuarioComponent implements OnInit {
   ngOnInit(): void {
 
       if (this.modoCrear) {
-        this.usuarioForm.controls.username.setAsyncValidators(this.validadores.validarUsername(this._usuarioService));
+        this.usuarioForm.controls.username.setAsyncValidators(this.validadores.validarUsername(this.usuarioService));
       } else {
         this.cargarDataAlFormulario(this.usuario);
       }
 
-      this._perfilService.cargarComboPerfil()
+      this.perfilService.cargarComboPerfil()
         .subscribe ( perfiles => this.perfiles = perfiles);
   }
 
@@ -78,45 +77,44 @@ export class UsuarioComponent implements OnInit {
     return (pass1 === pass2) ? false : true;
   }
 
-
   crearFormulario(){
-    this.usuarioForm = this.fb.group({
+
+      this.usuarioForm = this.fb.group({
         id: [''],
         nombre: ['', Validators.required],
         username: ['', Validators.required],
         password1: ['', Validators.required],
         password2: [''],
         perfil: ['', Validators.required],
-    }, {
-      validators: this.validadores.passwordsIguales('password1', 'password2')
-    });
+
+      }, {
+        validators: this.validadores.passwordsIguales('password1', 'password2')
+      });
   }
 
   usernameChanges(){
     this.usuarioForm.get('username').valueChanges.subscribe(resp => {
-      this.usuarioForm.controls.username.setAsyncValidators(this.validadores.validarUsername(this._usuarioService));
+      this.usuarioForm.controls.username.setAsyncValidators(this.validadores.validarUsername(this.usuarioService));
     });
   }
 
   cargarDataAlFormulario(usuario: Usuario){
 
-    this._usuarioService.cargarUsuario(usuario._id)
-    // tslint:disable-next-line: no-shadowed-variable
-    .subscribe (usuario => {
-      this.nombreMostrar = usuario.nombre,
+    this.usuarioService.cargarUsuario(usuario._id)
+    .subscribe (rpta => {
+      this.nombreMostrar = rpta.nombre,
 
-      // this.usuarioForm.setValue({
       this.usuarioForm.reset({
-        id: usuario._id,
-        nombre: usuario.nombre,
-        username: usuario.username,
-        perfil: usuario.perfil._id
+        id: rpta._id,
+        nombre: rpta.nombre,
+        username: rpta.username,
+        perfil: rpta.perfil._id
       });
     });
   }
 
   mostrarModal( id: string) {
-    this._modalUploadService.mostrarModal('usuarios', id);
+    this.modalUploadService.mostrarModal('usuarios', id);
   }
 
   registrarUsuario() {
@@ -135,11 +133,11 @@ export class UsuarioComponent implements OnInit {
       this.usuarioForm.value.id,
     );
 
-    this._usuarioService.crearUsuario ( usuario )
+    this.usuarioService.crearUsuario ( usuario )
     .subscribe( () => {
       this.activeModal.dismiss();
       this.router.navigate(['/usuarios']);
-      this._usuarioService.cargarUsuarios();
+      this.usuarioService.cargarUsuarios();
     });
   }
 

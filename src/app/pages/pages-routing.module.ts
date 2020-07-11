@@ -2,13 +2,15 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { PagesComponent } from './pages.component';
 import { LoginGuardGuard } from '../services/service.index';
-import { ProfileComponent } from './userProfile/userProfile.component';
+import { ProfileComponent } from './usuarios/userProfile/userProfile.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { GraficasComponent } from './graficas/graficas.component';
 import { BusquedaComponent } from './busqueda/busqueda.component';
-import { UsuariosComponent } from './usuarios/usuarios.component';
-import { UsuarioComponent } from './usuarios/usuario.component';
-import { PerfilesComponent } from './perfiles/perfiles.component';
+import { UsuariosComponent } from './usuarios/usuarios-lista/usuarios-lista.component';
+
+
+import { UsuarioComponent } from './usuarios/usuario-form/usuario-form.component';
+import { PerfilesComponent } from './perfiles/perfiles-lista/perfiles-lista.component';
 
 
 const routes: Routes = [

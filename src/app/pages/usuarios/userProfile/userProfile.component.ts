@@ -1,16 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import { Usuario } from '../../models/usuario.model';
+import { Usuario } from '../../../models/usuario.model';
 
-import { UsuarioService, PerfilService } from '../../services/service.index';
-import { Perfil } from '../../models/perfil.model';
+
 import Swal from 'sweetalert2';
-import { ModalUploadService } from '../../components/modal-upload/modal-upload.service';
+
 import { Router } from '@angular/router';
+import { Perfil } from '../../../models/perfil.model';
+import { ModalUploadService } from '../../../components/modal-upload/modal-upload.service';
+import { UsuarioService, PerfilService } from '../../../services/service.index';
+
 
 @Component({
   selector: 'app-profile',
   templateUrl: './userProfile.component.html'
 })
+
 export class ProfileComponent implements OnInit {
 
   usuario: Usuario;
@@ -20,32 +24,29 @@ export class ProfileComponent implements OnInit {
   admin: any;
 
   constructor(
-    // tslint:disable-next-line: variable-name
-    public _usuarioService: UsuarioService,
-    // tslint:disable-next-line: variable-name
-    public _perfilService: PerfilService,
-    // tslint:disable-next-line: variable-name
-    public _modalUploadService: ModalUploadService,
+    public usuarioService: UsuarioService,
+    public perfilService: PerfilService,
+    public modalUploadService: ModalUploadService,
     public route: Router,
   ) {
-    this.usuario = _usuarioService.usuario;
+    this.usuario = usuarioService.usuario;
    }
 
   ngOnInit(): void {
-    this._perfilService.cargarComboPerfil()
+    this.perfilService.cargarComboPerfil()
     .subscribe ( perfiles => this.perfiles = perfiles);
 
-    this._modalUploadService.notificacion
+    this.modalUploadService.notificacion
     .subscribe(resp => {
       const token = localStorage.getItem('token');
       this.usuario.img = resp.usuario.img;
-      this._usuarioService.guardarStorage(resp.usuario._id, token, resp.usuario );
-      this._usuarioService.cargarStorage();
+      this.usuarioService.guardarStorage(resp.usuario._id, token, resp.usuario );
+      this.usuarioService.cargarStorage();
     });
   }
 
   mostrarModal( id: string) {
-    this._modalUploadService.mostrarModal('usuarios', id);
+    this.modalUploadService.mostrarModal('usuarios', id);
   }
 
   actualizar(usuario: Usuario) {
@@ -54,7 +55,7 @@ export class ProfileComponent implements OnInit {
     this.usuario.password = usuario.password;
     this.usuario.perfil = usuario.perfil;
 
-    this._usuarioService.crearUsuario ( this.usuario )
+    this.usuarioService.crearUsuario ( this.usuario )
     .subscribe();
   }
 
@@ -80,7 +81,7 @@ export class ProfileComponent implements OnInit {
   }
 
   cambiarImagen() {
-    this._usuarioService.cambiarImagen( this.imagenSubir, this.usuario._id);
+    this.usuarioService.cambiarImagen( this.imagenSubir, this.usuario._id);
   }
 
 }

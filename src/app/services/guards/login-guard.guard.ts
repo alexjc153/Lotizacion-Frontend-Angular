@@ -9,13 +9,13 @@ export class LoginGuardGuard implements CanActivate {
 
   constructor(
     // tslint:disable-next-line: variable-name
-    public _usuarioService: UsuarioService,
+    public usuarioService: UsuarioService,
     public router: Router
     ) {}
 
   canActivate() {
 
-    if (this._usuarioService.estaLogueado()) {
+    if (this.usuarioService.estaLogueado()) {
       return true;
     } else {
       this.router.navigate(['/login']);

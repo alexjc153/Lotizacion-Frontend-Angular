@@ -23,7 +23,7 @@ export class LoginComponent implements OnInit {
   constructor(
     public router: Router,
     // tslint:disable-next-line: variable-name
-    public _usuarioService: UsuarioService,
+    public usuarioService: UsuarioService,
     private toastr: ToastrService,
     private title: Title)
     {}
@@ -47,7 +47,7 @@ export class LoginComponent implements OnInit {
     const usuario = new Usuario(null, forma.value.username, forma.value.password, null);
 
     this.iniciando = true;
-    this._usuarioService.login(usuario)
+    this.usuarioService.login(usuario)
       .subscribe(() => {
         this.toastr.success('Bienvenido al sistema');
         this.router.navigate(['/dashboard']);

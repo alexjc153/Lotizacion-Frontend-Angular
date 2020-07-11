@@ -4,9 +4,11 @@ import { HttpClient } from '@angular/common/http';
 import { URL_SERVICIOS } from '../../config/config';
 import { Usuario } from 'src/app/models/usuario.model';
 import { Perfil } from 'src/app/models/perfil.model';
-import { UsuarioComponent } from '../usuarios/usuario.component';
+
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { PerfilComponent } from '../perfiles/perfil.component';
+
+import { UsuarioComponent } from '../usuarios/usuario-form/usuario-form.component';
+import { PerfilComponent } from '../perfiles/perfil-form/perfil-form.component';
 
 @Component({
   selector: 'app-busqueda',

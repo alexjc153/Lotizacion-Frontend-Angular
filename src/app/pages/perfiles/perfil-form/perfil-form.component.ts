@@ -1,15 +1,16 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
-import { Perfil } from 'src/app/models/perfil.model';
-import { PerfilService } from 'src/app/services/service.index';
+
 import { Router } from '@angular/router';
+import { Perfil } from '../../../models/perfil.model';
+import { PerfilService } from '../../../services/perfil/perfil.service';
 
 
 @Component({
   selector: 'app-perfil',
-  templateUrl: './perfil.component.html',
-  styleUrls: ['./perfil.component.css']
+  templateUrl: './perfil-form.component.html',
+  styleUrls: ['./perfil-form.component.css']
 })
 
 export class PerfilComponent implements OnInit {
@@ -23,7 +24,7 @@ perfil: Perfil;
     public activeModal: NgbActiveModal,
     public router: Router,
     // tslint:disable-next-line: variable-name
-    public _perfilService: PerfilService,
+    public perfilService: PerfilService,
     ) {
       this.crearFormulario();
     }
@@ -48,7 +49,7 @@ crearFormulario(){
 
 cargarDataAlFormulario(perfil: Perfil){
 
-  this._perfilService.cargarPerfil(perfil._id)
+  this.perfilService.cargarPerfil(perfil._id)
   // tslint:disable-next-line: no-shadowed-variable
   .subscribe (perfil => {
     this.perfilForm.setValue({
@@ -73,11 +74,11 @@ registrarPerfil() {
     this.perfilForm.value.id,
   );
 
-  this._perfilService.crearPerfil(perfil)
+  this.perfilService.crearPerfil(perfil)
   .subscribe(() =>  {
     this.activeModal.dismiss();
     this.router.navigate(['/perfiles']);
-    this._perfilService.cargarPerfiles();
+    this.perfilService.cargarPerfiles();
   });
 
 }

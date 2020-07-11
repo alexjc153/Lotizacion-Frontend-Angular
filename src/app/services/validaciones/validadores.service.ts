@@ -16,7 +16,7 @@ export class ValidadoresService {
 
   constructor(
     // tslint:disable-next-line: variable-name
-    private _usuarioService: UsuarioService
+    private usuarioService: UsuarioService
   ) {}
 
   passwordsIguales(pass1: string, pass2: string) {

@@ -1,15 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { Usuario } from '../../models/usuario.model';
-import { UsuarioService } from '../../services/service.index';
+import { Usuario } from '../../../models/usuario.model';
+import { UsuarioService } from '../../../services/service.index';
 import Swal from 'sweetalert2';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router, NavigationEnd } from '@angular/router';
-import { UsuarioComponent } from './usuario.component';
+import { UsuarioComponent } from '../usuario-form/usuario-form.component';
+
 
 @Component({
   selector: 'app-usuarios',
-  templateUrl: './usuarios.component.html'
+  templateUrl: './usuarios-lista.component.html'
 })
 
 export class UsuariosComponent implements OnInit {
@@ -25,13 +26,12 @@ export class UsuariosComponent implements OnInit {
 
   constructor(
     private modalService: NgbModal,
-    // tslint:disable-next-line: variable-name
-    public _usuarioService: UsuarioService,
+    public usuarioService: UsuarioService,
     public router: Router,
   ) {
 
     this.cargarUsuarios();
-    this.usuario = _usuarioService.usuario;
+    this.usuario = usuarioService.usuario;
 
     // Refresh ventana al guardar registro desde Modal
       // tslint:disable-next-line: only-arrow-functions
@@ -79,7 +79,7 @@ export class UsuariosComponent implements OnInit {
 
     this.cargando = true;
 
-    this._usuarioService.cargarUsuarios()
+    this.usuarioService.cargarUsuarios()
     .subscribe( (resp: any) => {
       this.totalRegistros = resp.total;
       this.usuarios = resp.usuarios;
@@ -89,7 +89,7 @@ export class UsuariosComponent implements OnInit {
 
   borrarUsuario(usuario: Usuario) {
 
-    if (usuario._id === this._usuarioService.usuario._id) {
+    if (usuario._id === this.usuarioService.usuario._id) {
       Swal.fire('Error', 'No puede borrar su propio usuario.', 'error');
       return;
     }
@@ -105,7 +105,7 @@ export class UsuariosComponent implements OnInit {
       cancelButtonText: 'Cancelar'
     }).then((borrar) => {
       if (borrar.value) {
-        this._usuarioService.borrarUsuario(usuario._id)
+        this.usuarioService.borrarUsuario(usuario._id)
         .subscribe(() => this.cargarUsuarios()
         );
       }
@@ -122,7 +122,7 @@ export class UsuariosComponent implements OnInit {
 
     this.cargando = true;
 
-    this._usuarioService.buscarUsuarios(termino)
+    this.usuarioService.buscarUsuarios(termino)
     .subscribe((usuarios: Usuario[]) => {
       this.usuarios = usuarios;
       this.cargando = false;
