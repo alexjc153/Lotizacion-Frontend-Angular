@@ -1,0 +1,74 @@
+<div class="row animated fadeIn">
+    <div class="col-12">
+
+        <div class="form-group">
+            <input #buscar (keyup)="buscarUsuario(buscar.value)" type="text" class="form-control" placeholder="Buscar perfil...">
+        </div>
+        <div class="form-group"><button (click)="nuevoUsuario()" type="button" class="btn btn-success waves-effect waves-light m-r-10">
+                <i class="fa fa-plus-circle"></i>
+                Nuevo
+            </button>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="cargando" class="row animated fadeIn">
+    <div class="col-sm-12">
+        <div class="alert alert-warning text-center">
+            <strong>Cargando</strong>
+            <br>
+            <i class="fa fa-refresh fa-spin fa-2x"></i>
+            <br>
+            <span>Espere por favor...</span>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="!cargando" class="row animated fadeIn">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title"><strong>Usuarios Registrados</strong></h4>
+
+                <div class="table-responsive-lg">
+                    <table class="table table-hover borderless">
+                        <caption *ngIf="buscar.value!==''" class="text-muted">Mostrando {{ usuarios.length }} registro(s) - (Filtrado de un total de {{ totalRegistros }} registros) </caption>
+                        <caption *ngIf="buscar.value===''" class="text-muted">Mostrando {{ usuarios.length }} registro(s) de un total de {{ totalRegistros }} registros</caption>
+                        <thead class="thead-dark">
+                            <tr>
+                                <th style="width: 20px;">Foto</th>
+                                <th>Nombre Completo</th>
+                                <th>Nombre de Usuario</th>
+                                <th>Perfil de Usuario</th>
+                                <th style="width: 150px;">Acciones</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td colspan="5" align="center" class="text-muted" *ngIf="usuarios.length === 0">No se ha encontrado ningún registro</td>
+                            </tr>
+                            <tr *ngFor="let usuario of usuarios">
+                                <td>
+                                    <img [src]="usuario.img | imagen" class="img-40 img-circle">
+                                </td>
+                                <td>{{ usuario.nombre }}</td>
+                                <td>{{ usuario.username }}</td>
+                                <td>{{ usuario.perfil.nombre }}</td>
+                                <td>
+                                    <button (click)="editarUsuario(usuario)" type="button" class="btn btn-icon btn-pure btn-outline" data-toggle="modal" data-target="#usuarioModal">
+                                        <i class="fa fa-edit text-primary"></i>
+                                         
+                                    </button>
+                                    <button (click)="borrarUsuario(usuario)" type="button" class="btn btn-icon btn-pure btn-outline" data-toggle="tooltip" data-original-title="Eliminar">
+                                        <i class="fa fa-close text-danger"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

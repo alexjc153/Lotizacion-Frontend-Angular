@@ -1,0 +1,27 @@
+<div class="col-12 animated fadeIn">
+    <div class="card card-body">
+        <h3 class="box-title m-b-20"><strong>
+            <span class="text-muted">{{ modoCrear ? 'Nuevo Perfil' : 'Editar Perfil'}}</span>
+        </strong></h3>
+        <div class="row">
+            <div class="col-sm-12 col-xs-12">
+                <form [formGroup]="perfilForm" (ngSubmit)="registrarPerfil()" class="needs-validation" autocomplete="off">
+                    <div class="form-group">
+                        <label for="nombre">Nombre de Perfil *</label>
+                        <input formControlName="nombre" [class.is-invalid]="nombreNoValido" type="text" class="form-control form-control-sm" placeholder="Nombre de perfil..." autocomplete="off">
+                        <small *ngIf="nombreNoValido" class="text-danger">El campo es obligatorio</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="descripcion">Descripción</label>
+                        <input formControlName="descripcion" type="text" class="form-control form-control-sm" placeholder="Descripción...">
+                    </div>
+                    <button [disabled]="perfilForm.invalid" class="btn btn-success waves-effect waves-light m-r-10">
+                        <i class="fa fa-save"></i>
+                        Guardar
+                    </button>
+                    <button (click)="activeModal.close('Close click')" class="btn btn-secondary btn-outline waves-effect waves-light">Cancelar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

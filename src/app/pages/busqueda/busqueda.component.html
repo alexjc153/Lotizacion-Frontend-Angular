@@ -1,0 +1,48 @@
+<div class="row">
+
+
+    <div class="col-4">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title"><strong>Usuarios</strong></h4>
+
+                <table class="table table-borderless table-hover">
+                    <caption class="text-muted"><strong> Registros Encontrados: {{ usuarios.length}} </strong></caption>
+                    <tbody>
+                        <tr *ngFor="let usuario of usuarios" (click)="editarUsuario(usuario)" class="pointer">
+                            <td>
+                                <img [src]="usuario.img | imagen" class="img-40 img-circle">
+                            </td>
+                            <td>{{ usuario.nombre }}</td>
+                        </tr>
+                    </tbody>
+                    <div class="alert alert-info" *ngIf="usuarios.length===0">
+                        No existen registros
+                    </div>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-4">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title"><strong>Perfiles</strong></h4>
+
+                <table class="table table-hover">
+                    <caption class="text-muted"><strong> Registros Encontrados: {{ perfiles.length}} </strong></caption>
+                    <tbody>
+                        <tr *ngFor="let perfil of perfiles" (click)="editarPerfil(perfil)" class="pointer">
+                            <td>{{ perfil.nombre }}</td>
+                            <td>{{ perfil.descripcion }}</td>
+                        </tr>
+                    </tbody>
+                    <div class="alert alert-info" *ngIf="perfiles.length===0">
+                        No existen registros
+                    </div>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>

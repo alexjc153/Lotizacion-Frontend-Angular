@@ -1,0 +1,60 @@
+<div class="row animated fadeIn">
+    <div class="col-lg-5">
+        <div class="card">
+            <div class="card-body text-center">
+                <h3 class="card-title">Fotografía del Usuario</h3>
+                <h4 class="card-subtitle">{{ usuario.username }}</h4>
+
+                <img (click)="mostrarModal(usuario._id)" *ngIf="!imagenTemp" [src]="usuario.img | imagen" class="w150 rounded pointer">
+                <br>
+                <br>
+                <button (click)="mostrarModal(usuario._id)" class="btn btn-sm btn-outline-success">Elegir Imagen</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-7">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Perfil del Usuario - <small class="text-muted">{{usuario.username}} </small></h4>
+                <form ngNativeValidate #f="ngForm" (ngSubmit)="actualizar(f.value)" class="form">
+                    <div class="form-group">
+                        <label for="nombre">Nombre Completo</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="ti-user"></i></span>
+                            </div>
+                            <input [ngModel]="usuario.nombre" name="nombre" type="text" class="form-control" placeholder="Nombre Completo" required>
+                        </div>
+                        <!-- <div class="input-group">
+                            <div class="input-group-addon"></div>
+                            <input [ngModel]="usuario.nombre" name="nombre" type="text" class="form-control" placeholder="Nombre Completo" required>
+                        </div> -->
+                    </div>
+                    <div class="form-group">
+                        <label for="username">Nombre de Usuario</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="ti-face-smile"></i></span>
+                            </div>
+                            <input [ngModel]="usuario.username" name="username" type="text" class="form-control" placeholder="Nombre de Usuario" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="perfil">Perfil</label>
+                        <select [ngModel]="usuario.perfil" name="perfil" class="form-control" required>
+                            <option value="">Seleccione Perfil </option>
+                            <option *ngFor="let perfil of perfiles" [value]="perfil._id">{{perfil.nombre}}</option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">
+                        <i class="fa fa-save"></i>
+                            Guardar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
