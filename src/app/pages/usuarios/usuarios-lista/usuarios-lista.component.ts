@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Usuario } from '../../../models/usuario.model';
 import { UsuarioService } from '../../../services/service.index';
 import Swal from 'sweetalert2';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router } from '@angular/router';
 import { UsuarioComponent } from '../usuario-form/usuario-form.component';
 
 
@@ -32,19 +32,6 @@ export class UsuariosComponent implements OnInit {
 
     this.cargarUsuarios();
     this.usuario = usuarioService.usuario;
-
-    // Refresh ventana al guardar registro desde Modal
-      // tslint:disable-next-line: only-arrow-functions
-    this.router.routeReuseStrategy.shouldReuseRoute = function() {
-      return false;
-    };
-    this.mySubscription = this.router.events.subscribe((event) => {
-    if (event instanceof NavigationEnd) {
-      // Trick the Router into believing it's last link wasn't previously loaded
-      this.router.navigated = false;
-    }
-  });
-
   }
 
   ngOnInit(): void {
@@ -53,25 +40,28 @@ export class UsuariosComponent implements OnInit {
 
   nuevoUsuario() {
     const modal = this.modalService.open(UsuarioComponent);
-    modal.result.then(
-      this.handleModalUsuarioFormClose.bind(this),
-      this.handleModalUsuarioFormClose.bind(this),
-    );
     modal.componentInstance.modoCrear = true;
-  }
 
-  handleModalUsuarioFormClose() {
-    // alert('Se ha cerrado el modal');
+    modal.result.then((yes) => {
+      this.cargarUsuarios();
+    },
+    (cancel) => {
+
+    });
   }
 
   editarUsuario(usuario: Usuario){
     const modal = this.modalService.open(UsuarioComponent);
-    modal.result.then(
-      this.handleModalUsuarioFormClose.bind(this),
-      this.handleModalUsuarioFormClose.bind(this),
-    );
+
     modal.componentInstance.modoCrear = false;
     modal.componentInstance.usuario = usuario;
+
+    modal.result.then((yes) => {
+      this.cargarUsuarios();
+    },
+    (cancel) => {
+
+    });
   }
 
 
@@ -106,7 +96,11 @@ export class UsuariosComponent implements OnInit {
     }).then((borrar) => {
       if (borrar.value) {
         this.usuarioService.borrarUsuario(usuario._id)
-        .subscribe(() => this.cargarUsuarios()
+        .subscribe(() => {
+            const index = this.usuarios.findIndex( encontrado => encontrado._id === usuario._id);
+            this.usuarios.splice(index, 1);
+            this.usuarios = [...this.usuarios];
+        }
         );
       }
     });

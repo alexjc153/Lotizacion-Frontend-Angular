@@ -15,15 +15,14 @@ import { PerfilService } from '../../../services/perfil/perfil.service';
 
 export class PerfilComponent implements OnInit {
 
-perfilForm: FormGroup;
-modoCrear = true;
-perfil: Perfil;
+  perfilForm: FormGroup;
+  modoCrear = true;
+  perfil: Perfil;
 
   constructor(
     private fb: FormBuilder,
     public activeModal: NgbActiveModal,
     public router: Router,
-    // tslint:disable-next-line: variable-name
     public perfilService: PerfilService,
     ) {
       this.crearFormulario();
@@ -33,54 +32,50 @@ perfil: Perfil;
     if (!this.modoCrear){
       this.cargarDataAlFormulario(this.perfil);
     }
-}
+  }
 
-get nombreNoValido(){
-  return this.perfilForm.get('nombre').invalid && this.perfilForm.get('nombre').touched && !this.perfilForm.get('nombre').pristine;
-}
+  get nombreNoValido(){
+    return this.perfilForm.get('nombre').invalid && this.perfilForm.get('nombre').touched && !this.perfilForm.get('nombre').pristine;
+  }
 
-crearFormulario(){
-  this.perfilForm = this.fb.group({
-      id: [null],
-      nombre: [null, Validators.required],
-      descripcion: [null],
-  });
-}
-
-cargarDataAlFormulario(perfil: Perfil){
-
-  this.perfilService.cargarPerfil(perfil._id)
-  // tslint:disable-next-line: no-shadowed-variable
-  .subscribe (perfil => {
-    this.perfilForm.setValue({
-      id: perfil._id,
-      nombre: perfil.nombre,
-      descripcion: perfil.descripcion
-    });
-  });
-}
-
-registrarPerfil() {
-
-  if (this.perfilForm.invalid) {
-    return Object.values(this.perfilForm.controls).forEach (control => {
-      control.markAllAsTouched();
+  crearFormulario(){
+    this.perfilForm = this.fb.group({
+        id: [null],
+        nombre: [null, Validators.required],
+        descripcion: [null],
     });
   }
 
-  const perfil = new Perfil(
-    this.perfilForm.value.nombre,
-    this.perfilForm.value.descripcion,
-    this.perfilForm.value.id,
-  );
+  cargarDataAlFormulario(perfil: Perfil){
 
-  this.perfilService.crearPerfil(perfil)
-  .subscribe(() =>  {
-    this.activeModal.dismiss();
-    this.router.navigate(['/perfiles']);
-    this.perfilService.cargarPerfiles();
-  });
+    this.perfilService.cargarPerfil(perfil._id)
+    .subscribe (res => {
+      this.perfilForm = this.fb.group({
+        id: [res._id],
+        nombre: [res.nombre, Validators.required],
+        descripcion: [{value: res.descripcion, disabled: true}]
+      });
+    });
+  }
 
-}
+  registrarPerfil() {
 
+    if (this.perfilForm.invalid) {
+      return Object.values(this.perfilForm.controls).forEach (control => {
+        control.markAllAsTouched();
+      });
+    }
+
+    const perfil = new Perfil(
+      this.perfilForm.value.nombre,
+      this.perfilForm.value.descripcion,
+      this.perfilForm.value.id,
+    );
+
+    this.perfilService.crearPerfil(perfil)
+    .subscribe(() =>  {
+      this.activeModal.close('yes');
+    });
+
+  }
 }

@@ -1,8 +1,10 @@
 <div class="col-12 animated fadeIn">
     <div class="card card-body">
-        <h3 class="box-title m-b-20"><strong>
-            <span class="text-muted">{{ modoCrear ? 'Nuevo Perfil' : 'Editar Perfil'}}</span>
-        </strong></h3>
+        <h3 class="box-title m-b-20">
+            <strong>
+                <span class="text-muted">{{ modoCrear ? 'Nuevo Perfil' : 'Editar Perfil'}}</span>
+            </strong>
+        </h3>
         <div class="row">
             <div class="col-sm-12 col-xs-12">
                 <form [formGroup]="perfilForm" (ngSubmit)="registrarPerfil()" class="needs-validation" autocomplete="off">
@@ -19,7 +21,7 @@
                         <i class="fa fa-save"></i>
                         Guardar
                     </button>
-                    <button (click)="activeModal.close('Close click')" class="btn btn-secondary btn-outline waves-effect waves-light">Cancelar</button>
+                    <button (click)="activeModal.dismiss()" class="btn btn-secondary btn-outline waves-effect waves-light">Cancelar</button>
                 </form>
             </div>
         </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 import { Usuario } from '../../../models/usuario.model';
 import { Perfil } from '../../../models/perfil.model';
@@ -22,7 +22,7 @@ import { ModalUploadService } from '../../../components/modal-upload/modal-uploa
 export class UsuarioComponent implements OnInit {
 
   usuarioForm: FormGroup;
-  modoCrear = true;
+  @Input () modoCrear = true;
   perfiles: Perfil [] = [];
   usuario: Usuario;
   imagenTemp: any;
@@ -51,6 +51,7 @@ export class UsuarioComponent implements OnInit {
 
       this.perfilService.cargarComboPerfil()
         .subscribe ( perfiles => this.perfiles = perfiles);
+
   }
 
   get nombreNoValido(){
@@ -80,11 +81,11 @@ export class UsuarioComponent implements OnInit {
   crearFormulario(){
 
       this.usuarioForm = this.fb.group({
-        id: [''],
-        nombre: ['', Validators.required],
-        username: ['', Validators.required],
-        password1: ['', Validators.required],
-        password2: [''],
+        id: [null],
+        nombre: [null, Validators.required],
+        username: [null, Validators.required],
+        password1: [null, Validators.required],
+        password2: [null],
         perfil: ['', Validators.required],
 
       }, {
@@ -101,20 +102,28 @@ export class UsuarioComponent implements OnInit {
   cargarDataAlFormulario(usuario: Usuario){
 
     this.usuarioService.cargarUsuario(usuario._id)
-    .subscribe (rpta => {
-      this.nombreMostrar = rpta.nombre,
+    .subscribe (res => {
+
+      this.nombreMostrar = res.nombre,
+
+      // this.usuarioForm = this.fb.group({
+      //   id: [res._id],
+      //   nombre: [res.nombre, Validators.required],
+      //   username: [res.username, Validators.required],
+      //   password1: [null],
+      //   password2: [null],
+      //   perfil: [res.perfil._id, Validators.required]
+      // });
+
+      // this.usuarioForm.controls.username.setAsyncValidators(this.validadores.validarUsername(this.usuarioService));
 
       this.usuarioForm.reset({
-        id: rpta._id,
-        nombre: rpta.nombre,
-        username: rpta.username,
-        perfil: rpta.perfil._id
+        id: res._id,
+        nombre: res.nombre,
+        username: res.username,
+        perfil: res.perfil._id
       });
     });
-  }
-
-  mostrarModal( id: string) {
-    this.modalUploadService.mostrarModal('usuarios', id);
   }
 
   registrarUsuario() {
@@ -135,9 +144,7 @@ export class UsuarioComponent implements OnInit {
 
     this.usuarioService.crearUsuario ( usuario )
     .subscribe( () => {
-      this.activeModal.dismiss();
-      this.router.navigate(['/usuarios']);
-      this.usuarioService.cargarUsuarios();
+      this.activeModal.close('yes');
     });
   }
 

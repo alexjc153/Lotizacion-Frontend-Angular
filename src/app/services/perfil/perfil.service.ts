@@ -59,13 +59,11 @@ export class PerfilService {
 
       return this.http.put( url, perfil)
         .pipe(map( (resp: any) => {
-          // Swal.fire('Perfil Actualizado Correctamente', perfil.nombre, 'success');
           this.toastr.success('Perfil Actualizado Correctamente', 'Operación exitosa!');
           return true;
         })
         , catchError(err => {
           this.toastr.error(err.error.mensaje, 'Error al actualizar el registro');
-          // Swal.fire(err.error.mensaje, err.error.errors.message, 'error');
           return throwError(err);
         }));
       } else {
@@ -74,11 +72,9 @@ export class PerfilService {
         return this.http.post(url, perfil)
         .pipe(map ( (resp: any) => {
           this.toastr.success('Perfil Registrado Correctamente', 'Operación exitosa!');
-          // Swal.fire('Perfil Creado', perfil.nombre, 'success');
           return true;
         }), catchError(err => {
           this.toastr.error(err.error.mensaje, 'Error al crear el registro');
-          // Swal.fire(err.error.mensaje, err.error.errors.message, 'error');
           return throwError(err);
         }));
     }

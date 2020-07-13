@@ -36,7 +36,6 @@ import { ToastrModule } from 'ngx-toastr';
     CommonModule,
     BrowserModule,
     PagesModule,
-    // APP_ROUTES,
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,

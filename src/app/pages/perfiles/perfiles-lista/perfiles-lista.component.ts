@@ -27,25 +27,11 @@ export class PerfilesComponent implements OnInit {
 
   constructor(
     private modalService: NgbModal,
-    // tslint:disable-next-line: variable-name
     public perfilService: PerfilService,
     public router: Router,
     ) {
       this.cargarPerfiles();
       this.perfil = perfilService.perfil;
-
-      // Refresh ventana al guardar registro desde Modal
-      // tslint:disable-next-line: only-arrow-functions
-      this.router.routeReuseStrategy.shouldReuseRoute = function() {
-      return false;
-    };
-      this.mySubscription = this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        // Trick the Router into believing it's last link wasn't previously loaded
-        this.router.navigated = false;
-      }
-    });
-
     }
 
   ngOnInit(): void {
@@ -53,26 +39,32 @@ export class PerfilesComponent implements OnInit {
   }
 
   nuevoPerfil() {
+
     const modal = this.modalService.open(PerfilComponent);
-    modal.result.then(
-      this.handleModalPerfilFormClose.bind(this),
-      this.handleModalPerfilFormClose.bind(this),
-    );
     modal.componentInstance.modoCrear = true;
+
+    modal.result.then((yes) => {
+      this.cargarPerfiles();
+    },
+    (cancel) => {
+
+    });
   }
 
-  handleModalPerfilFormClose() {
-    // alert('Se ha cerrado el modal');
-  }
 
   editarPerfil(perfil: Perfil){
     const modal = this.modalService.open(PerfilComponent);
-    modal.result.then(
-      this.handleModalPerfilFormClose.bind(this),
-      this.handleModalPerfilFormClose.bind(this),
-    );
+
     modal.componentInstance.modoCrear = false;
     modal.componentInstance.perfil = perfil;
+
+    modal.result.then((yes) => {
+      this.cargarPerfiles();
+    },
+    (cancel) => {
+
+    });
+
   }
 
   cargarPerfiles() {
@@ -97,8 +89,14 @@ export class PerfilesComponent implements OnInit {
       cancelButtonText: 'Cancelar'
     }).then((borrar) => {
       if (borrar.value) {
-        this.perfilService.borrarPerfil(perfil._id).subscribe(() => this.cargarPerfiles());
+        this.perfilService.borrarPerfil(perfil._id)
+        .subscribe(() => {
+          const index = this.perfiles.findIndex( encontrado => encontrado._id === perfil._id);
+          this.perfiles.splice(index, 1);
+          this.perfiles = [...this.perfiles];
       }
+      );
+    }
     });
   }
 
@@ -120,10 +118,4 @@ export class PerfilesComponent implements OnInit {
 
   }
 
-  // tslint:disable-next-line: use-lifecycle-interface
-  ngOnDestroy() {
-    if (this.mySubscription) {
-      this.mySubscription.unsubscribe();
-    }
-  }
 }
