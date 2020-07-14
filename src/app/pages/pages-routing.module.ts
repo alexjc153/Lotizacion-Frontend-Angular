@@ -11,6 +11,7 @@ import { UsuariosComponent } from './usuarios/usuarios-lista/usuarios-lista.comp
 
 import { UsuarioComponent } from './usuarios/usuario-form/usuario-form.component';
 import { PerfilesComponent } from './perfiles/perfiles-lista/perfiles-lista.component';
+import { GruposComponent } from './grupos/grupos-lista/grupos-lista.component';
 
 
 const routes: Routes = [
@@ -23,14 +24,17 @@ const routes: Routes = [
             { path: 'perfilUsuario', component: ProfileComponent, data: {titulo: 'Perfil de Usuario'} },
             { path: 'dashboard', component: DashboardComponent, data: {titulo: 'Dashboard'} },
             { path: 'graficas', component: GraficasComponent, data: {titulo: 'Gráficas'} },
+
             { path: 'busqueda/:termino', component: BusquedaComponent, data: {titulo: 'Buscador'} },
 
             // Matenimientos
             { path: 'usuarios', component: UsuariosComponent, data: {titulo: 'Usuarios'} },
-            { path: 'usuario/:id', component: UsuarioComponent, data: {titulo: 'Usuario'} },
             { path: 'usuario/verificarUsernameNotTaken', component: UsuarioComponent },
 
             { path: 'perfiles', component: PerfilesComponent, data: {titulo: 'Perfiles'} },
+
+            { path: 'grupos', component: GruposComponent, data: {titulo: 'Grupos'} },
+
             { path: '', redirectTo: '/dashboard', pathMatch: 'full'},
         ],
     },

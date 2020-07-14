@@ -99,6 +99,7 @@ export class UsuariosComponent implements OnInit {
         .subscribe(() => {
             const index = this.usuarios.findIndex( encontrado => encontrado._id === usuario._id);
             this.usuarios.splice(index, 1);
+            this.totalRegistros = this.usuarios.length;
             this.usuarios = [...this.usuarios];
         }
         );

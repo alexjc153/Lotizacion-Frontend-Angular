@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 
 import Swal from 'sweetalert2';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router } from '@angular/router';
 import { Perfil } from '../../../models/perfil.model';
 import { PerfilService } from '../../../services/perfil/perfil.service';
 import { PerfilComponent } from '../perfil-form/perfil-form.component';
@@ -23,20 +23,17 @@ export class PerfilesComponent implements OnInit {
   perfiles: Perfil [] = [];
   totalRegistros = 0;
 
-  mySubscription: any;
-
-  constructor(
+constructor(
     private modalService: NgbModal,
     public perfilService: PerfilService,
     public router: Router,
     ) {
       this.cargarPerfiles();
-      this.perfil = perfilService.perfil;
     }
 
-  ngOnInit(): void {
-    this.cargarPerfiles();
-  }
+    ngOnInit(): void {
+      this.cargarPerfiles();
+    }
 
   nuevoPerfil() {
 
@@ -74,6 +71,7 @@ export class PerfilesComponent implements OnInit {
       this.totalRegistros = resp.total;
       this.perfiles = resp.perfiles;
       this.cargando = false;
+
     });
   }
 
@@ -93,6 +91,7 @@ export class PerfilesComponent implements OnInit {
         .subscribe(() => {
           const index = this.perfiles.findIndex( encontrado => encontrado._id === perfil._id);
           this.perfiles.splice(index, 1);
+          this.totalRegistros = this.perfiles.length;
           this.perfiles = [...this.perfiles];
       }
       );

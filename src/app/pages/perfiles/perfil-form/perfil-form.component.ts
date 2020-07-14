@@ -53,7 +53,7 @@ export class PerfilComponent implements OnInit {
       this.perfilForm = this.fb.group({
         id: [res._id],
         nombre: [res.nombre, Validators.required],
-        descripcion: [{value: res.descripcion, disabled: true}]
+        descripcion: [res.descripcion]
       });
     });
   }

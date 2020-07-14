@@ -3,6 +3,8 @@ import { NgModule } from '@angular/core';
 // Angular Material Modules
 import {MatCardModule} from '@angular/material/card';
 import {MatInputModule} from '@angular/material/input';
+import {MatTableModule} from '@angular/material/table';
+import {MatPaginatorModule} from '@angular/material/paginator';
 
 // Pipe Module
 import { PipesModule } from '../pipes/pipes.module';
@@ -26,11 +28,12 @@ import { UsuariosComponent } from './usuarios/usuarios-lista/usuarios-lista.comp
 
 import { ModalUploadComponent } from '../components/modal-upload/modal-upload.component';
 import { BusquedaComponent } from './busqueda/busqueda.component';
-import { GruposComponent } from './grupos/grupos.component';
+import { GruposComponent } from './grupos/grupos-lista/grupos-lista.component';
 import { PagesRoutingModule } from './pages-routing.module';
 import { UsuarioComponent } from './usuarios/usuario-form/usuario-form.component';
 import { PerfilesComponent } from './perfiles/perfiles-lista/perfiles-lista.component';
 import { PerfilComponent } from './perfiles/perfil-form/perfil-form.component';
+import { GrupoComponent } from './grupos/grupo-form/grupo-form.component';
 
 
 @NgModule({
@@ -45,7 +48,8 @@ import { PerfilComponent } from './perfiles/perfil-form/perfil-form.component';
         PerfilComponent,
         ModalUploadComponent,
         BusquedaComponent,
-        GruposComponent
+        GruposComponent,
+        GrupoComponent,
     ],
     exports: [
         PagesComponent,
@@ -55,13 +59,14 @@ import { PerfilComponent } from './perfiles/perfil-form/perfil-form.component';
     imports: [
         CommonModule,
         SharedModule,
-        // PAGES_ROUTES,
         PagesRoutingModule,
         PipesModule,
         FormsModule,
         ReactiveFormsModule,
         MatCardModule,
         MatInputModule,
+        MatTableModule,
+        MatPaginatorModule
     ],
     entryComponents: [PerfilComponent]
 })

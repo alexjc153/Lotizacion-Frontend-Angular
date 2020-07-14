@@ -45,4 +45,25 @@
         </div>
     </div>
 
+    <div class="col-4">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title"><strong>Grupos</strong></h4>
+
+                <table class="table table-hover">
+                    <caption class="text-muted"><strong> Registros Encontrados: {{ grupos.length}} </strong></caption>
+                    <tbody>
+                        <tr *ngFor="let grupo of grupos" (click)="editarGrupo(grupo)" class="pointer">
+                            <td>{{ grupo.nombre }}</td>
+                            <td>{{ grupo.descripcion }}</td>
+                        </tr>
+                    </tbody>
+                    <div class="alert alert-info" *ngIf="grupos.length===0">
+                        No existen registros
+                    </div>
+                </table>
+            </div>
+        </div>
+    </div>
+
 </div>
