@@ -1,4 +1,4 @@
-<div class="col-12 animated fadeIn">
+<!-- <div class="col-12 animated fadeIn">
     <div class="card card-body">
         <h3 class="box-title m-b-20">
             <strong>
@@ -26,4 +26,44 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
+
+<!-- <form [formGroup]="grupoForm" (ngSubmit)="registrarGrupo()" class="needs-validation" autocomplete="off">
+    <div class="form-group">
+        <label for="nombre">Nombre de Grupo *</label>
+        <input formControlName="nombre" [class.is-invalid]="nombreNoValido" type="text" class="form-control form-control-sm" placeholder="Nombre de grupo..." autocomplete="off">
+        <small *ngIf="nombreNoValido" class="text-danger">El campo es obligatorio</small>
+    </div>
+    <div class="form-group">
+        <label for="descripcion">Descripción</label>
+        <input formControlName="descripcion" type="text" class="form-control form-control-sm" placeholder="Descripción...">
+    </div>
+    <button [disabled]="grupoForm.invalid" class="btn btn-success waves-effect waves-light m-r-10">
+        <i class="fa fa-save"></i>
+        Guardar
+    </button>
+    <button class="btn btn-secondary btn-outline waves-effect waves-light">Cancelar</button>
+</form> -->
+
+<form [formGroup]="grupoForm" (ngSubmit)="registrarGrupo()" class="needs-validation" autocomplete="off">
+    <mat-form-field>
+        <mat-label>Nombre de Grupo</mat-label>
+        <input matInput formControlName="nombre" [class.is-invalid]="nombreNoValido" placeholder="Nombre de Grupo *">
+        <mat-error>El campo es requerido</mat-error>
+    </mat-form-field>
+    <br>
+    <br>
+    <mat-form-field>
+        <mat-label for="descripcion">Descripción</mat-label>
+        <input matInput formControlName="descripcion" placeholder="Descripción">
+    </mat-form-field>
+    <br>
+    <br>
+    <div class="botones">
+        <button mat-raised-button color="primary" type="submit" [disabled]="grupoForm.invalid">
+            <mat-icon>save</mat-icon>
+            Guardar
+        </button>
+        <button mat-flat-button (click)="cerrarDialog()">Cancelar</button>
+    </div>
+</form>

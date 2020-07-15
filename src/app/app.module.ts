@@ -48,7 +48,7 @@ import { ToastrModule } from 'ngx-toastr';
       preventDuplicates: false,
     }),
   ],
-  providers: [  ],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

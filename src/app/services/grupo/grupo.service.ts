@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { Grupo } from '../../models/grupo.model';
 import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
@@ -13,6 +13,8 @@ export class GrupoService {
 
   grupo: Grupo;
   token: string;
+  public guardado: EventEmitter<Grupo> = new EventEmitter<Grupo>();
+  public cargandoGrupo: EventEmitter<Grupo> = new EventEmitter<Grupo>();
 
   constructor(
     public http: HttpClient,

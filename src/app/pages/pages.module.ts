@@ -1,10 +1,6 @@
 import { NgModule } from '@angular/core';
 
-// Angular Material Modules
-import {MatCardModule} from '@angular/material/card';
-import {MatInputModule} from '@angular/material/input';
-import {MatTableModule} from '@angular/material/table';
-import {MatPaginatorModule} from '@angular/material/paginator';
+import { MaterialModule } from '../material/material.module';
 
 // Pipe Module
 import { PipesModule } from '../pipes/pipes.module';
@@ -36,6 +32,7 @@ import { PerfilComponent } from './perfiles/perfil-form/perfil-form.component';
 import { GrupoComponent } from './grupos/grupo-form/grupo-form.component';
 
 
+
 @NgModule({
     declarations: [
         PagesComponent,
@@ -63,12 +60,10 @@ import { GrupoComponent } from './grupos/grupo-form/grupo-form.component';
         PipesModule,
         FormsModule,
         ReactiveFormsModule,
-        MatCardModule,
-        MatInputModule,
-        MatTableModule,
-        MatPaginatorModule
+        MaterialModule
+
     ],
-    entryComponents: [PerfilComponent]
+    entryComponents: []
 })
 
 export class PagesModule {}

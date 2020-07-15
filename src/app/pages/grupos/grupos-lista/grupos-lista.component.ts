@@ -1,10 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { Grupo } from 'src/app/models/grupo.model';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { GrupoService } from '../../../services/grupo/grupo.service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { GrupoComponent } from '../grupo-form/grupo-form.component';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
+import { group } from '@angular/animations';
 
 @Component({
   selector: 'app-grupos',
@@ -22,94 +27,120 @@ constructor(
     private modalService: NgbModal,
     public grupoService: GrupoService,
     public router: Router,
+    private dialog: MatDialog,
     ) {
-      this.cargarGrupos();
+      this.cargaTabla();
+      // this.cargarGrupos();
     }
+
+    listData: MatTableDataSource<any>;
+    displayedColumns: string [] = ['nombre', 'descripcion', 'acciones'];
+    @ViewChild(MatSort) sort: MatSort;
+    @ViewChild(MatPaginator) paginator: MatPaginator;
+    termino: string;
 
     ngOnInit(): void {
-      this.cargarGrupos();
+      this.cargaTabla();
+      this.grupoService.guardado.subscribe( res => {
+        this.cargaTabla();
+      });
     }
 
-  nuevoGrupo() {
+    nuevoGrupo() {
 
-    const modal = this.modalService.open(GrupoComponent);
-    modal.componentInstance.modoCrear = true;
+      const modal = this.modalService.open(GrupoComponent);
+      modal.componentInstance.modoCrear = true;
 
-    modal.result.then((yes) => {
-      this.cargarGrupos();
-    },
-    (cancel) => {
+      modal.result.then((yes) => {
+        // this.cargarGrupos();
+        this.cargaTabla();
+      },
+      (cancel) => {
 
-    });
-  }
+      });
+    }
 
 
-  editarGrupo(grupo: Grupo){
-    const modal = this.modalService.open(GrupoComponent);
+    editarGrupo(grupo: Grupo){
+      const modal = this.modalService.open(GrupoComponent);
 
-    modal.componentInstance.modoCrear = false;
-    modal.componentInstance.grupo = grupo;
+      modal.componentInstance.modoCrear = false;
+      modal.componentInstance.grupo = grupo;
 
-    modal.result.then((yes) => {
-      this.cargarGrupos();
-    },
-    (cancel) => {
+      modal.result.then((yes) => {
+        // this.cargarGrupos();
+        this.cargaTabla();
+      },
+      (cancel) => {
 
-    });
+      });
 
-  }
+    }
 
-  cargarGrupos() {
-    this.cargando = true;
-    this.grupoService.cargarGrupos()
-    .subscribe( (resp: any) => {
-      this.totalRegistros = resp.total;
-      this.grupos = resp.grupos;
-      this.cargando = false;
+    cargaTabla(){
+      this.grupoService.cargarGrupos()
+        .subscribe((list: any) => {
+          const array = list.grupos;
+          this.listData = new MatTableDataSource(array);
+          this.listData.sort = this.sort;
+          this.listData.paginator = this.paginator;
+          this.listData.paginator._intl.itemsPerPageLabel = 'Registros por página';
+          this.listData.filterPredicate = (data, filter) => {
+            const dataStr = data.nombre + data.descripcion;
+            return dataStr.toLowerCase().indexOf(filter) !== -1;
+          };
+        });
+    }
 
-    });
-  }
-
-  borrarGrupo(grupo: Grupo) {
-    Swal.fire({
-      title: 'Eliminar grupo',
-      text: 'Está seguro de borrar el grupo: ' + grupo.nombre + '?',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#EF5451',
-      cancelButtonColor: 'secondary',
-      confirmButtonText: 'Sí, borrar grupo!',
-      cancelButtonText: 'Cancelar'
-    }).then((borrar) => {
-      if (borrar.value) {
-        this.grupoService.borrarGrupo(grupo._id)
-        .subscribe(() => {
-          const index = this.grupos.findIndex( encontrado => encontrado._id === grupo._id);
-          this.grupos.splice(index, 1);
-          this.totalRegistros = this.grupos.length;
-          this.grupos = [...this.grupos];
+    borrarGrupo(grupo: Grupo) {
+      Swal.fire({
+        title: 'Eliminar grupo',
+        text: 'Está seguro de borrar el grupo: ' + grupo.nombre + '?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#EF5451',
+        cancelButtonColor: 'secondary',
+        confirmButtonText: 'Sí, borrar grupo!',
+        cancelButtonText: 'Cancelar'
+      }).then((borrar) => {
+        if (borrar.value) {
+          this.grupoService.borrarGrupo(grupo._id)
+          .subscribe(() => {
+            const index = this.grupos.findIndex( encontrado => encontrado._id === grupo._id);
+            this.grupos.splice(index, 1);
+            this.totalRegistros = this.grupos.length;
+            this.grupos = [...this.grupos];
+            this.cargaTabla();
+        }
+        );
       }
-      );
-    }
-    });
-  }
-
-  buscarGrupo(termino: string) {
-
-    if (termino.length <= 0) {
-      this.cargarGrupos();
-      return;
+      });
     }
 
-    this.cargando = true;
+    limpiarBuscador() {
+      this.termino = '';
+      this.applyFilter();
+    }
 
-    this.grupoService.buscarGrupos(termino)
-    .subscribe((grupos: Grupo[]) => {
+    applyFilter() {
+        this.listData.filter = this.termino.trim().toLowerCase();
+    }
 
-      this.grupos = grupos;
-      this.cargando = false;
-    });
+    onCreate(){
+      const dialogConfig = new MatDialogConfig();
+      // dialogConfig.disableClose = true;
+      dialogConfig.autoFocus = true;
+      dialogConfig.width = '60%';
+      this.dialog.open(GrupoComponent, dialogConfig);
+    }
 
-  }
+    onEdit(grupo: Grupo){
+      const dialogConfig = new MatDialogConfig();
+      // dialogConfig.disableClose = true;
+      dialogConfig.autoFocus = true;
+      dialogConfig.width = '50%';
+      this.dialog.open(GrupoComponent, dialogConfig);
+      this.grupoService.cargandoGrupo.emit(grupo);
+    }
 
 }

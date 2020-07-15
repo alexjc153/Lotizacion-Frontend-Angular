@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewChildren, Output, EventEmitter, Input } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { Router } from '@angular/router';
 import { Grupo } from '../../../models/grupo.model';
 import { GrupoService } from '../../../services/grupo/grupo.service';
+import { MatDialogRef } from '@angular/material/dialog';
+import { GruposComponent } from '../grupos-lista/grupos-lista.component';
 
 @Component({
   selector: 'app-grupo',
@@ -15,21 +17,25 @@ export class GrupoComponent implements OnInit {
 
   grupoForm: FormGroup;
   modoCrear = true;
-  grupo: Grupo;
+  @Input() grupo: Grupo;
 
   constructor(
     private fb: FormBuilder,
-    public activeModal: NgbActiveModal,
+    // public activeModal: NgbActiveModal,
     public router: Router,
     public grupoService: GrupoService,
+    public dialogRef: MatDialogRef<GrupoComponent>,
     ) {
       this.crearFormulario();
+      this.grupoService.cargandoGrupo.subscribe(res => {
+        this.cargarDataAlFormulario(res);
+      });
     }
 
   ngOnInit(): void {
     if (!this.modoCrear){
-      this.cargarDataAlFormulario(this.grupo);
     }
+    this.grupoService.cargarGrupos();
   }
 
   get nombreNoValido(){
@@ -72,9 +78,16 @@ export class GrupoComponent implements OnInit {
 
     this.grupoService.crearGrupo(grupo)
     .subscribe(() =>  {
-      this.activeModal.close('yes');
+      this.grupoService.guardado.emit(grupo);
+      this.cerrarDialog();
     });
 
+  }
+
+  cerrarDialog() {
+    this.grupoForm.reset();
+    this.crearFormulario();
+    this.dialogRef.close();
   }
 
 }
