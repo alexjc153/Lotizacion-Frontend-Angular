@@ -46,37 +46,6 @@ constructor(
       });
     }
 
-    nuevoGrupo() {
-
-      const modal = this.modalService.open(GrupoComponent);
-      modal.componentInstance.modoCrear = true;
-
-      modal.result.then((yes) => {
-        // this.cargarGrupos();
-        this.cargaTabla();
-      },
-      (cancel) => {
-
-      });
-    }
-
-
-    editarGrupo(grupo: Grupo){
-      const modal = this.modalService.open(GrupoComponent);
-
-      modal.componentInstance.modoCrear = false;
-      modal.componentInstance.grupo = grupo;
-
-      modal.result.then((yes) => {
-        // this.cargarGrupos();
-        this.cargaTabla();
-      },
-      (cancel) => {
-
-      });
-
-    }
-
     cargaTabla(){
       this.grupoService.cargarGrupos()
         .subscribe((list: any) => {
