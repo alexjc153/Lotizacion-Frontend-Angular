@@ -9,7 +9,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
-import { group } from '@angular/animations';
 
 @Component({
   selector: 'app-grupos',
@@ -24,13 +23,11 @@ export class GruposComponent implements OnInit {
   totalRegistros = 0;
 
 constructor(
-    private modalService: NgbModal,
     public grupoService: GrupoService,
     public router: Router,
     private dialog: MatDialog,
     ) {
       this.cargaTabla();
-      // this.cargarGrupos();
     }
 
     listData: MatTableDataSource<any>;
@@ -60,6 +57,25 @@ constructor(
           };
         });
     }
+// Acá es Material
+    onCreate(){
+      const dialogConfig = new MatDialogConfig();
+      // dialogConfig.disableClose = true;
+      dialogConfig.autoFocus = true;
+      dialogConfig.width = '300px';
+      dialogConfig.height = '300px';
+      this.dialog.open(GrupoComponent, dialogConfig);
+    }
+
+    onEdit(grupo: Grupo){
+      const dialogConfig = new MatDialogConfig();
+      // dialogConfig.disableClose = true;
+      dialogConfig.autoFocus = true;
+      dialogConfig.width = '300px';
+      dialogConfig.height = '300px';
+      this.dialog.open(GrupoComponent, dialogConfig);
+      this.grupoService.cargandoGrupo.emit(grupo);
+    }
 
     borrarGrupo(grupo: Grupo) {
       Swal.fire({
@@ -86,30 +102,13 @@ constructor(
       });
     }
 
+    applyFilter() {
+      this.listData.filter = this.termino.trim().toLowerCase();
+    }
+
     limpiarBuscador() {
       this.termino = '';
       this.applyFilter();
-    }
-
-    applyFilter() {
-        this.listData.filter = this.termino.trim().toLowerCase();
-    }
-
-    onCreate(){
-      const dialogConfig = new MatDialogConfig();
-      // dialogConfig.disableClose = true;
-      dialogConfig.autoFocus = true;
-      dialogConfig.width = '60%';
-      this.dialog.open(GrupoComponent, dialogConfig);
-    }
-
-    onEdit(grupo: Grupo){
-      const dialogConfig = new MatDialogConfig();
-      // dialogConfig.disableClose = true;
-      dialogConfig.autoFocus = true;
-      dialogConfig.width = '50%';
-      this.dialog.open(GrupoComponent, dialogConfig);
-      this.grupoService.cargandoGrupo.emit(grupo);
     }
 
 }

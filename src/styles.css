@@ -19,8 +19,11 @@ body {
 
 body {
     margin: 0;
-    /* font-family: Roboto, "Helvetica Neue", sans-serif; */
+    font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
+
+/* Fondo para Modal de Imágenes */
 
 .fondo-negro {
     background-color: rgba(0, 0, 0, 0.4);
@@ -35,5 +38,3 @@ body {
 .oculto {
     display: none;
 }
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

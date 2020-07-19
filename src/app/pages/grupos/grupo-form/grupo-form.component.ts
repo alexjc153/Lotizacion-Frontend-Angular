@@ -6,7 +6,6 @@ import { Router } from '@angular/router';
 import { Grupo } from '../../../models/grupo.model';
 import { GrupoService } from '../../../services/grupo/grupo.service';
 import { MatDialogRef } from '@angular/material/dialog';
-import { GruposComponent } from '../grupos-lista/grupos-lista.component';
 
 @Component({
   selector: 'app-grupo',
@@ -21,7 +20,6 @@ export class GrupoComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    // public activeModal: NgbActiveModal,
     public router: Router,
     public grupoService: GrupoService,
     public dialogRef: MatDialogRef<GrupoComponent>,
@@ -57,8 +55,9 @@ export class GrupoComponent implements OnInit {
       this.grupoForm = this.fb.group({
         id: [res._id],
         nombre: [res.nombre, Validators.required],
-        descripcion: [res.descripcion]
+        descripcion: [res.descripcion],
       });
+      this.modoCrear = false;
     });
   }
 
@@ -79,12 +78,12 @@ export class GrupoComponent implements OnInit {
     this.grupoService.crearGrupo(grupo)
     .subscribe(() =>  {
       this.grupoService.guardado.emit(grupo);
-      this.cerrarDialog();
+      this.onClose();
     });
 
   }
 
-  cerrarDialog() {
+  onClose() {
     this.grupoForm.reset();
     this.crearFormulario();
     this.dialogRef.close();
