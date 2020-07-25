@@ -40,6 +40,7 @@ constructor(
       this.cargaTabla();
       this.grupoService.guardado.subscribe( res => {
         this.cargaTabla();
+        this.termino = '';
       });
     }
 
@@ -62,8 +63,8 @@ constructor(
       const dialogConfig = new MatDialogConfig();
       // dialogConfig.disableClose = true;
       dialogConfig.autoFocus = true;
-      dialogConfig.width = '300px';
-      dialogConfig.height = '300px';
+      dialogConfig.width = '400px';
+      dialogConfig.height = '350px';
       this.dialog.open(GrupoComponent, dialogConfig);
     }
 
@@ -71,8 +72,8 @@ constructor(
       const dialogConfig = new MatDialogConfig();
       // dialogConfig.disableClose = true;
       dialogConfig.autoFocus = true;
-      dialogConfig.width = '300px';
-      dialogConfig.height = '300px';
+      dialogConfig.width = '400px';
+      dialogConfig.height = '350px';
       this.dialog.open(GrupoComponent, dialogConfig);
       this.grupoService.cargandoGrupo.emit(grupo);
     }

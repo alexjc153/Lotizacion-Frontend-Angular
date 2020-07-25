@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild, ViewChildren, Output, EventEmitter, Input } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { Router } from '@angular/router';
 import { Grupo } from '../../../models/grupo.model';
