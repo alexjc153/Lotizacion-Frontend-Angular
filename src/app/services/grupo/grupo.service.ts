@@ -9,6 +9,7 @@ import { throwError } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
+
 export class GrupoService {
 
   grupo: Grupo;
@@ -22,6 +23,14 @@ export class GrupoService {
   ) {
     this.token = localStorage.getItem('token');
    }
+
+   cargarComboGrupo() {
+    const url = URL_SERVICIOS + '/grupo';
+    return this.http.get(url)
+    .pipe(map (( resp: any) => {
+        return resp.grupos;
+    }));
+  }
 
   cargarGrupo(id: string) {
     const url = URL_SERVICIOS + '/grupo/' + id;
@@ -82,6 +91,10 @@ export class GrupoService {
     .pipe(map( resp => {
       this.toastr.info('El grupo ha sido eliminado correctamente', 'Eliminado!');
       return true;
+    })
+    , catchError(err => {
+      this.toastr.error(err.error.mensaje);
+      return throwError(err);
     }));
     }
 

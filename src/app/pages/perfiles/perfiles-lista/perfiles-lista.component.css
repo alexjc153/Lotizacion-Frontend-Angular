@@ -1,21 +1,102 @@
-/* .example-card {
-    max-width: 400px;
-}
-
-.example-header-image {
-    background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
-    background-size: cover;
-} */
-
-.list-table {
-    width: 96%;
-    margin: 2%;
-}
-
 table {
     width: 100%;
 }
 
-th.mat-sort-header-sorted {
-    color: black;
+.header-content {
+    display: flex;
+    align-items: stretch;
+}
+
+.filter-content {
+    padding: 1rem;
+    flex-grow: 11;
+}
+
+.button-new-content {
+    padding: 1rem;
+    flex-grow: 1;
+}
+
+.mat-header-cell {
+    background: #01A1BA;
+    color: white;
+}
+
+.mat-form-field {
+    width: 100%;
+}
+
+td,
+th {
+    width: 40%;
+}
+
+.buscado {
+    background-color: yellow;
+}
+
+.button-container-table {
+    display: inline-block;
+}
+
+.mat-column-acciones {
+    flex: 0 0 160px;
+    justify-content: center;
+}
+
+.mat-footer-row .mat-footer-cell {
+    justify-content: center;
+}
+
+@media screen and (max-width: 767px) {
+    .mat-table {
+        border: 0;
+        vertical-align: middle
+    }
+    .mat-table caption {
+        font-size: 1em;
+    }
+    .mat-table .mat-header-row {
+        display: none;
+    }
+    .mat-table .mat-row {
+        padding-top: 5px;
+        border-bottom: 5px solid #ddd;
+        display: block;
+    }
+    .mat-table .mat-row:nth-child(even) {
+        background: #f7f7f7
+    }
+    .mat-table .mat-row:nth-child(odd) {
+        background: #FFF
+    }
+    .mat-table .mat-cell {
+        padding-left: 0px;
+        border-bottom: 1px solid #ddd;
+        display: block;
+        font-size: 1em;
+        text-align: right;
+        padding-right: 20px;
+        height: 30px;
+        margin-bottom: 4%;
+    }
+    .mat-table .mat-cell:before {
+        /*
+      * aria-label has no advantage, it won't be read inside a table
+      content: attr(aria-label);
+      */
+        content: attr(data-label);
+        float: left;
+        padding-left: 20px;
+        text-transform: uppercase;
+        font-weight: bold;
+        font-size: .85em;
+    }
+    .mat-table .mat-cell:last-child {
+        border-bottom: 0;
+        margin-bottom: -50px;
+    }
+    .mat-table .mat-cell:first-child {
+        margin-top: 4%;
+    }
 }

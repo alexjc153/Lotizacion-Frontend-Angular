@@ -1,67 +1,67 @@
-<div class="row animated fadeIn">
-    <div class="col-12">
+<div class="animated fadeIn">
 
-        <div class="form-group">
-            <input #buscar (keyup)="buscarPerfil(buscar.value)" type="text" class="form-control" placeholder="Buscar perfil...">
-        </div>
-        <div class="form-group"><button (click)="nuevoPerfil()" type="button" class="btn btn-success waves-effect waves-light m-r-10">
-                <i class="fa fa-plus-circle"></i>
-                Nuevo
+    <div class="row">
+        <div class="button-new-content">
+            <button mat-raised-button color="primary" (click)="onCreate()">
+                <mat-icon>add</mat-icon>Nuevo
             </button>
         </div>
-    </div>
-</div>
-
-<div *ngIf="cargando" class="row animated fadeIn">
-    <div class="col-sm-12">
-        <div class="alert alert-warning text-center">
-            <strong>Cargando</strong>
-            <br>
-            <i class="fa fa-refresh fa-spin fa-2x"></i>
-            <br>
-            <span>Espere por favor...</span>
+        <div class="filter-content">
+            <mat-form-field class="search-form-field">
+                <input matInput [(ngModel)]="termino" placeholder="Buscar..." autocomplete="off" (keyup)="applyFilter()">
+                <button mat-button *ngIf="termino" matSuffix mat-icon-button aria-label="Limpiar" (click)="limpiarBuscador()">
+                <mat-icon>clear</mat-icon>
+            </button>
+            </mat-form-field>
         </div>
     </div>
 </div>
 
-<div *ngIf="!cargando" class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title"><strong>Perfiles Registrados</strong></h4>
-                <div class="table-responsive-lg">
-                    <table class="table table-hover borderless">
-                        <caption *ngIf="buscar.value!==''" class="text-muted">Mostrando {{ perfiles.length }} registro(s) - (Filtrado de un total de {{ totalRegistros }} registros) </caption>
-                        <caption *ngIf="buscar.value===''" class="text-muted">Mostrando {{ perfiles.length }} registro(s) de un total de {{ totalRegistros }} registros</caption>
-                        <thead class="thead-dark">
-                            <tr>
-                                <th>Perfil</th>
-                                <th>Descripción</th>
-                                <th style="width: 120px;">Acciones</th>
-                            </tr>
-                        </thead>
+<div class="mat-elevation-z8">
+    <mat-table [dataSource]="listData" matSort>
 
-                        <tbody>
-                            <tr *ngFor="let perfil of perfiles">
-                                <td>{{ perfil.nombre }}</td>
-                                <td>{{ perfil.descripcion}}</td>
-                                <td>
-                                    <button (click)="editarPerfil(perfil)" type="button" class="btn btn-icon btn-pure btn-outline">
-                                        <i class="fa fa-edit text-primary"></i>
-                                         
-                                    </button>
-                                    <button (click)="borrarPerfil(perfil)" type="button" class="btn btn-icon btn-pure btn-outline" data-toggle="tooltip" data-original-title="Eliminar">
-                                        <i class="fa fa-close text-danger"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
+        <!-- Nombre Column -->
+        <ng-container matColumnDef="nombre">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Perfil </mat-header-cell>
+            <mat-cell *matCellDef="let row" data-label="perfil"> {{row.nombre}} </mat-cell>
+        </ng-container>
 
+        <!-- Descripción Column -->
+        <ng-container matColumnDef="descripcion">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Descripción </mat-header-cell>
+            <mat-cell *matCellDef="let row" data-label="descripcion"> {{row.descripcion}} </mat-cell>
+        </ng-container>
 
+        <!-- Acciones Column -->
+        <ng-container matColumnDef="acciones">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Acciones </mat-header-cell>
+            <mat-cell *matCellDef="let row" data-label="acciones">
+                <button mat-button matTooltip="Editar" matTooltipPosition="above" color="primary" (click)="onEdit(row)">
+                    <mat-icon>edit</mat-icon>  
+                </button>
+                <button mat-button matTooltip="Eliminar" matTooltipPosition="above" color="warn" (click)="borrarPerfil(row)">
+                    <mat-icon>delete_forever</mat-icon>
+                </button>
+            </mat-cell>
+        </ng-container>
 
+        <ng-container matColumnDef="loading">
+            <mat-footer-cell *matFooterCellDef colspan="3">
+                <app-spinner></app-spinner>
+            </mat-footer-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="noData">
+            <mat-footer-cell *matFooterCellDef colspan="3">
+                <span class="text-muted">No hay registros en la base de datos.</span>
+            </mat-footer-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        <mat-footer-row *matFooterRowDef="['loading']" [ngClass]="{'hide': listData!=null}"></mat-footer-row>
+        <mat-footer-row *matFooterRowDef="['noData']" [ngClass]="{'hide': !(listData!=null && listData.data.length==0)}"></mat-footer-row>
+    </mat-table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="10" showFirstLastButtons></mat-paginator>
 </div>

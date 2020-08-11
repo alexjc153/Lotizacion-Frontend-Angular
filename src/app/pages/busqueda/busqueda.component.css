@@ -1,0 +1,14 @@
+.cards-container {
+    width: 100%;
+}
+
+.mat-card {
+    margin: 10px;
+    /* min-width: 290px; */
+    max-width: 260px;
+}
+
+.mat-card-header {
+    display: flex;
+    justify-content: space-between;
+}

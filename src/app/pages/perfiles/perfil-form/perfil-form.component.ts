@@ -1,37 +1,38 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { Component, OnInit, ViewChild, ViewChildren, Output, EventEmitter, Input } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { Router } from '@angular/router';
 import { Perfil } from '../../../models/perfil.model';
 import { PerfilService } from '../../../services/perfil/perfil.service';
-
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-perfil',
   templateUrl: './perfil-form.component.html',
   styleUrls: ['./perfil-form.component.css']
 })
-
 export class PerfilComponent implements OnInit {
 
   perfilForm: FormGroup;
   modoCrear = true;
-  perfil: Perfil;
+  @Input() perfil: Perfil;
 
   constructor(
     private fb: FormBuilder,
-    public activeModal: NgbActiveModal,
     public router: Router,
     public perfilService: PerfilService,
+    public dialogRef: MatDialogRef<PerfilComponent>,
     ) {
       this.crearFormulario();
+      this.perfilService.cargandoPerfil.subscribe(res => {
+        this.cargarDataAlFormulario(res);
+      });
     }
 
   ngOnInit(): void {
     if (!this.modoCrear){
-      this.cargarDataAlFormulario(this.perfil);
     }
+    this.perfilService.cargarPerfiles();
   }
 
   get nombreNoValido(){
@@ -53,8 +54,9 @@ export class PerfilComponent implements OnInit {
       this.perfilForm = this.fb.group({
         id: [res._id],
         nombre: [res.nombre, Validators.required],
-        descripcion: [res.descripcion]
+        descripcion: [res.descripcion],
       });
+      this.modoCrear = false;
     });
   }
 
@@ -74,8 +76,16 @@ export class PerfilComponent implements OnInit {
 
     this.perfilService.crearPerfil(perfil)
     .subscribe(() =>  {
-      this.activeModal.close('yes');
+      this.perfilService.guardado.emit(perfil);
+      this.onClose();
     });
 
   }
+
+  onClose() {
+    this.perfilForm.reset();
+    this.crearFormulario();
+    this.dialogRef.close();
+  }
+
 }

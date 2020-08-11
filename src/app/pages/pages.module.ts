@@ -30,6 +30,8 @@ import { UsuarioComponent } from './usuarios/usuario-form/usuario-form.component
 import { PerfilesComponent } from './perfiles/perfiles-lista/perfiles-lista.component';
 import { PerfilComponent } from './perfiles/perfil-form/perfil-form.component';
 import { GrupoComponent } from './grupos/grupo-form/grupo-form.component';
+import { CategoriasComponent } from './categorias/categorias-lista/categorias-lista.component';
+import { CategoriaComponent } from './categorias/categoria-form/categoria-form.component';
 
 
 
@@ -47,6 +49,8 @@ import { GrupoComponent } from './grupos/grupo-form/grupo-form.component';
         BusquedaComponent,
         GruposComponent,
         GrupoComponent,
+        CategoriasComponent,
+        CategoriaComponent,
     ],
     exports: [
         PagesComponent,

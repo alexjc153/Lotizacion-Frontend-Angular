@@ -12,6 +12,7 @@ import { UsuariosComponent } from './usuarios/usuarios-lista/usuarios-lista.comp
 import { UsuarioComponent } from './usuarios/usuario-form/usuario-form.component';
 import { PerfilesComponent } from './perfiles/perfiles-lista/perfiles-lista.component';
 import { GruposComponent } from './grupos/grupos-lista/grupos-lista.component';
+import { CategoriasComponent } from './categorias/categorias-lista/categorias-lista.component';
 
 
 const routes: Routes = [
@@ -34,6 +35,8 @@ const routes: Routes = [
             { path: 'perfiles', component: PerfilesComponent, data: {titulo: 'Perfiles'} },
 
             { path: 'grupos', component: GruposComponent, data: {titulo: 'Grupos'} },
+
+            { path: 'categorias', component: CategoriasComponent, data: {titulo: 'Categorías'} },
 
             { path: '', redirectTo: '/dashboard', pathMatch: 'full'},
         ],

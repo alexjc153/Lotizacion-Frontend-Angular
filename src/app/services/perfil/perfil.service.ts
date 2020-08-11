@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { Perfil } from '../../models/perfil.model';
 import { URL_SERVICIOS } from 'src/app/config/config';
 import { HttpClient } from '@angular/common/http';
@@ -14,6 +14,8 @@ export class PerfilService {
 
   perfil: Perfil;
   token: string;
+  public guardado: EventEmitter<Perfil> = new EventEmitter<Perfil>();
+  public cargandoPerfil: EventEmitter<Perfil> = new EventEmitter<Perfil>();
 
   constructor(
     public http: HttpClient,
@@ -87,13 +89,12 @@ export class PerfilService {
 
     return this.http.delete(url)
     .pipe(map( resp => {
-      // Swal.fire(
-      //   'Eliminado!',
-      //   'El perfil ha sido eliminado correctamente.',
-      //   'success'
-      // );
       this.toastr.info('El perfil ha sido eliminado correctamente', 'Eliminado!');
       return true;
+    })
+    , catchError(err => {
+      this.toastr.error(err.error.mensaje);
+      return throwError(err);
     }));
     }
 

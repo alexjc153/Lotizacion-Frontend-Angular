@@ -1,14 +1,17 @@
 import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { Grupo } from 'src/app/models/grupo.model';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { GrupoService } from '../../../services/grupo/grupo.service';
-import { Router } from '@angular/router';
-import Swal from 'sweetalert2';
 import { GrupoComponent } from '../grupo-form/grupo-form.component';
+import { GrupoService } from '../../../services/grupo/grupo.service';
+
+import { Router } from '@angular/router';
+
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
+
+import Swal from 'sweetalert2';
+import { CategoriaService } from '../../../services/categoria/categoria.service';
 
 @Component({
   selector: 'app-grupos',
@@ -17,13 +20,14 @@ import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dial
 })
 export class GruposComponent implements OnInit {
 
-  cargando = false;
+  cargando = true;
   grupo: Grupo;
   grupos: Grupo [] = [];
   totalRegistros = 0;
 
 constructor(
     public grupoService: GrupoService,
+    public categoriaService: CategoriaService,
     public router: Router,
     private dialog: MatDialog,
     ) {
@@ -41,6 +45,7 @@ constructor(
       this.grupoService.guardado.subscribe( res => {
         this.cargaTabla();
         this.termino = '';
+
       });
     }
 

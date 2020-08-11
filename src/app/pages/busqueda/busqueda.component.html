@@ -1,69 +1,70 @@
-<div class="row">
+<app-spinner *ngIf="cargando"></app-spinner>
 
-
-    <div class="col-4">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title"><strong>Usuarios</strong></h4>
-
-                <table class="table table-borderless table-hover">
-                    <caption class="text-muted"><strong> Registros Encontrados: {{ usuarios.length}} </strong></caption>
-                    <tbody>
-                        <tr *ngFor="let usuario of usuarios" (click)="editarUsuario(usuario)" class="pointer">
-                            <td>
-                                <img [src]="usuario.img | imagen" class="img-40 img-circle">
-                            </td>
-                            <td>{{ usuario.nombre }}</td>
-                        </tr>
-                    </tbody>
-                    <div class="alert alert-info" *ngIf="usuarios.length===0">
-                        No existen registros
-                    </div>
-                </table>
+<div class="row animated fadeIn" *ngIf="!cargando">
+    <mat-card class="mat-elevation-z8">
+        <mat-card-header>
+            <mat-card-title>Perfiles</mat-card-title>
+            <div class="found text-muted">
+                <strong>Encontrados: {{ perfiles.length }}</strong>
             </div>
-        </div>
-    </div>
-
-    <div class="col-4">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title"><strong>Perfiles</strong></h4>
-
-                <table class="table table-hover">
-                    <caption class="text-muted"><strong> Registros Encontrados: {{ perfiles.length}} </strong></caption>
-                    <tbody>
-                        <tr *ngFor="let perfil of perfiles" (click)="editarPerfil(perfil)" class="pointer">
-                            <td>{{ perfil.nombre }}</td>
-                            <td>{{ perfil.descripcion }}</td>
-                        </tr>
-                    </tbody>
-                    <div class="alert alert-info" *ngIf="perfiles.length===0">
-                        No existen registros
-                    </div>
-                </table>
+        </mat-card-header>
+        <mat-divider></mat-divider>
+        <mat-card-content>
+            <mat-nav-list>
+                <mat-list-item *ngFor="let perfil of perfiles" (click)="onEditPerfil(perfil)" class="pointer">
+                    <h3 matLine><strong> {{perfil.nombre}} </strong></h3>
+                    <p matLine>
+                        <span> {{perfil.descripcion}} </span>
+                    </p>
+                </mat-list-item>
+                <div class="alert alert-info" *ngIf="perfiles.length===0">
+                    No se encontraron coincidencias
+                </div>
+            </mat-nav-list>
+        </mat-card-content>
+    </mat-card>
+    <mat-card class="mat-elevation-z8">
+        <mat-card-header>
+            <mat-card-title>Usuarios</mat-card-title>
+            <div class="found text-muted">
+                <strong>Encontrados: {{ usuarios.length }}</strong>
             </div>
-        </div>
-    </div>
+        </mat-card-header>
+        <mat-divider></mat-divider>
+        <mat-card-content>
+            <mat-nav-list>
+                <mat-list-item *ngFor="let usuario of usuarios" (click)="editarUsuario(usuario)" class="pointer">
 
-    <div class="col-4">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title"><strong>Grupos</strong></h4>
+                    <img [src]="usuario.img | imagen" class="img-30 img-circle">
+                    <span style="margin-left: 10px;"> {{usuario.nombre}} </span>
 
-                <table class="table table-hover">
-                    <caption class="text-muted"><strong> Registros Encontrados: {{ grupos.length}} </strong></caption>
-                    <tbody>
-                        <tr *ngFor="let grupo of grupos" (click)="editarGrupo(grupo)" class="pointer">
-                            <td>{{ grupo.nombre }}</td>
-                            <td>{{ grupo.descripcion }}</td>
-                        </tr>
-                    </tbody>
-                    <div class="alert alert-info" *ngIf="grupos.length===0">
-                        No existen registros
-                    </div>
-                </table>
+                </mat-list-item>
+                <div class="alert alert-info" *ngIf="usuarios.length===0">
+                    No se encontraron coincidencias
+                </div>
+            </mat-nav-list>
+        </mat-card-content>
+    </mat-card>
+    <mat-card class="mat-elevation-z8">
+        <mat-card-header>
+            <mat-card-title>Grupos</mat-card-title>
+            <div class="found text-muted">
+                <strong>Encontrados: {{ grupos.length }}</strong>
             </div>
-        </div>
-    </div>
-
+        </mat-card-header>
+        <mat-divider></mat-divider>
+        <mat-card-content>
+            <mat-nav-list>
+                <mat-list-item *ngFor="let grupo of grupos" (click)="onEditGrupo(grupo)" class="pointer">
+                    <h3 matLine><strong> {{grupo.nombre}} </strong></h3>
+                    <p matLine>
+                        {{grupo.descripcion}}
+                    </p>
+                </mat-list-item>
+                <div class="alert alert-info" *ngIf="grupos.length===0">
+                    No se encontraron coincidencias
+                </div>
+            </mat-nav-list>
+        </mat-card-content>
+    </mat-card>
 </div>

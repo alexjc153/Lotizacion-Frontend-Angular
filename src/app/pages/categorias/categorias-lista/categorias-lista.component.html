@@ -21,7 +21,7 @@
     <mat-table [dataSource]="listData" matSort>
         <!-- Nombre Column -->
         <ng-container matColumnDef="nombre">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Grupo </mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Categoría </mat-header-cell>
             <mat-cell *matCellDef="let row" data-label="grupo"> {{row.nombre}} </mat-cell>
         </ng-container>
 
@@ -31,6 +31,12 @@
             <mat-cell *matCellDef="let row" data-label="descripcion"> {{row.descripcion}} </mat-cell>
         </ng-container>
 
+        <!-- Categoria Column -->
+        <ng-container matColumnDef="grupo">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Grupo </mat-header-cell>
+            <mat-cell *matCellDef="let row" data-label="descripcion"> {{row.grupo.nombre}} </mat-cell>
+        </ng-container>
+
         <!-- Acciones Column -->
         <ng-container matColumnDef="acciones">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Acciones </mat-header-cell>
@@ -38,7 +44,7 @@
                 <button mat-button matTooltip="Editar" matTooltipPosition="above" color="primary" (click)="onEdit(row)">
                     <mat-icon>edit</mat-icon>  
                 </button>
-                <button mat-button matTooltip="Eliminar" matTooltipPosition="above" color="warn" (click)="borrarGrupo(row)">
+                <button mat-button matTooltip="Eliminar" matTooltipPosition="above" color="warn" (click)="borrarCategoria(row)">
                     <mat-icon>delete_forever</mat-icon>
                 </button>
             </mat-cell>

@@ -1,0 +1,30 @@
+<h1 mat-dialog-title>{{ modoCrear ? 'Nuevo Categoria' : 'Editar Categoria'}}</h1>
+<form [formGroup]="categoriaForm" (ngSubmit)="registrarCategoria()" class="needs-validation form-column" autocomplete="off">
+    <mat-form-field>
+        <mat-label>Nombre de Categoria</mat-label>
+        <input matInput formControlName="nombre" [class.is-invalid]="nombreNoValido" placeholder="Nombre de Categoria *" required>
+        <mat-error>El campo es requerido</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label for="descripcion">Descripción</mat-label>
+        <textarea matInput formControlName="descripcion" placeholder="Descripción"></textarea>
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Grupo</mat-label>
+        <mat-select formControlName="grupo" required>
+            <mat-option>----</mat-option>
+            <mat-option *ngFor="let grupo of grupos" [value]="grupo._id">
+                {{grupo.nombre}}
+            </mat-option>
+        </mat-select>
+        <mat-error *ngIf="grupoNoValido">Debe seleccionar un Grupo</mat-error>
+    </mat-form-field>
+
+
+    <button mat-raised-button color="primary" type="submit" [disabled]="categoriaForm.invalid">
+                <mat-icon>save</mat-icon>
+                Guardar
+            </button>
+    <button mat-flat-button (click)="onClose()">Cancelar</button>
+</form>

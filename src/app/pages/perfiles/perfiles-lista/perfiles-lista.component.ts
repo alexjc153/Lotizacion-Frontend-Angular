@@ -1,120 +1,118 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Component, OnInit, ViewChild, Input } from '@angular/core';
+import { Perfil } from 'src/app/models/perfil.model';
+import { PerfilComponent } from '../perfil-form/perfil-form.component';
+import { PerfilService } from '../../../services/perfil/perfil.service';
 
+import { Router } from '@angular/router';
+
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 
 import Swal from 'sweetalert2';
-import { Router } from '@angular/router';
-import { Perfil } from '../../../models/perfil.model';
-import { PerfilService } from '../../../services/perfil/perfil.service';
-import { PerfilComponent } from '../perfil-form/perfil-form.component';
-
-
 
 @Component({
   selector: 'app-perfiles',
   templateUrl: './perfiles-lista.component.html',
   styleUrls: ['./perfiles-lista.component.css']
 })
-
 export class PerfilesComponent implements OnInit {
 
-  cargando = false;
+  cargando = true;
   perfil: Perfil;
   perfiles: Perfil [] = [];
   totalRegistros = 0;
 
 constructor(
-    private modalService: NgbModal,
     public perfilService: PerfilService,
     public router: Router,
+    private dialog: MatDialog,
     ) {
-      this.cargarPerfiles();
+      this.cargaTabla();
     }
+
+    listData: MatTableDataSource<any>;
+    displayedColumns: string [] = ['nombre', 'descripcion', 'acciones'];
+    @ViewChild(MatSort) sort: MatSort;
+    @ViewChild(MatPaginator) paginator: MatPaginator;
+    termino: string;
 
     ngOnInit(): void {
-      this.cargarPerfiles();
+      this.cargaTabla();
+      this.perfilService.guardado.subscribe( res => {
+        this.cargaTabla();
+        this.termino = '';
+
+      });
     }
 
-  nuevoPerfil() {
+    cargaTabla(){
+      this.perfilService.cargarPerfiles()
+        .subscribe((list: any) => {
+          const array = list.perfiles;
+          this.listData = new MatTableDataSource(array);
+          this.listData.sort = this.sort;
+          this.listData.paginator = this.paginator;
+          this.listData.paginator._intl.itemsPerPageLabel = 'Registros por página';
+          this.listData.filterPredicate = (data, filter) => {
+            const dataStr = data.nombre + data.descripcion;
+            return dataStr.toLowerCase().indexOf(filter) !== -1;
+          };
+        });
+    }
+// Acá es Material
+    onCreate(){
+      const dialogConfig = new MatDialogConfig();
+      // dialogConfig.disableClose = true;
+      dialogConfig.autoFocus = true;
+      dialogConfig.width = '400px';
+      dialogConfig.height = '350px';
+      this.dialog.open(PerfilComponent, dialogConfig);
+    }
 
-    const modal = this.modalService.open(PerfilComponent);
-    modal.componentInstance.modoCrear = true;
+    onEdit(perfil: Perfil){
+      const dialogConfig = new MatDialogConfig();
+      // dialogConfig.disableClose = true;
+      dialogConfig.autoFocus = true;
+      dialogConfig.width = '400px';
+      dialogConfig.height = '350px';
+      this.dialog.open(PerfilComponent, dialogConfig);
+      this.perfilService.cargandoPerfil.emit(perfil);
+    }
 
-    modal.result.then((yes) => {
-      this.cargarPerfiles();
-    },
-    (cancel) => {
-
-    });
-  }
-
-
-  editarPerfil(perfil: Perfil){
-    const modal = this.modalService.open(PerfilComponent);
-
-    modal.componentInstance.modoCrear = false;
-    modal.componentInstance.perfil = perfil;
-
-    modal.result.then((yes) => {
-      this.cargarPerfiles();
-    },
-    (cancel) => {
-
-    });
-
-  }
-
-  cargarPerfiles() {
-    this.cargando = true;
-    this.perfilService.cargarPerfiles()
-    .subscribe( (resp: any) => {
-      this.totalRegistros = resp.total;
-      this.perfiles = resp.perfiles;
-      this.cargando = false;
-
-    });
-  }
-
-  borrarPerfil(perfil: Perfil) {
-    Swal.fire({
-      title: 'Eliminar perfil',
-      text: 'Está seguro de borrar el perfil: ' + perfil.nombre + '?',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#EF5451',
-      cancelButtonColor: 'secondary',
-      confirmButtonText: 'Sí, borrar perfil!',
-      cancelButtonText: 'Cancelar'
-    }).then((borrar) => {
-      if (borrar.value) {
-        this.perfilService.borrarPerfil(perfil._id)
-        .subscribe(() => {
-          const index = this.perfiles.findIndex( encontrado => encontrado._id === perfil._id);
-          this.perfiles.splice(index, 1);
-          this.totalRegistros = this.perfiles.length;
-          this.perfiles = [...this.perfiles];
+    borrarPerfil(perfil: Perfil) {
+      Swal.fire({
+        title: 'Eliminar perfil',
+        text: 'Está seguro de borrar el perfil: ' + perfil.nombre + '?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#EF5451',
+        cancelButtonColor: 'secondary',
+        confirmButtonText: 'Sí, borrar perfil!',
+        cancelButtonText: 'Cancelar'
+      }).then((borrar) => {
+        if (borrar.value) {
+          this.perfilService.borrarPerfil(perfil._id)
+          .subscribe(() => {
+            const index = this.perfiles.findIndex( encontrado => encontrado._id === perfil._id);
+            this.perfiles.splice(index, 1);
+            this.totalRegistros = this.perfiles.length;
+            this.perfiles = [...this.perfiles];
+            this.cargaTabla();
+        }
+        );
       }
-      );
-    }
-    });
-  }
-
-  buscarPerfil(termino: string) {
-
-    if (termino.length <= 0) {
-      this.cargarPerfiles();
-      return;
+      });
     }
 
-    this.cargando = true;
+    applyFilter() {
+      this.listData.filter = this.termino.trim().toLowerCase();
+    }
 
-    this.perfilService.buscarPerfiles(termino)
-    .subscribe((perfiles: Perfil[]) => {
-
-      this.perfiles = perfiles;
-      this.cargando = false;
-    });
-
-  }
+    limpiarBuscador() {
+      this.termino = '';
+      this.applyFilter();
+    }
 
 }

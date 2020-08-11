@@ -14,6 +14,9 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatListModule} from '@angular/material/list';
+import {MatChipsModule} from '@angular/material/chips';
+import {MatSelectModule} from '@angular/material/select';
 
 @NgModule({
   declarations: [],
@@ -30,7 +33,10 @@ import {MatTooltipModule} from '@angular/material/tooltip';
     MatFormFieldModule,
     MatGridListModule,
     MatProgressSpinnerModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatListModule,
+    MatChipsModule,
+    MatSelectModule
   ],
   exports: [
     MatCardModule,
@@ -44,7 +50,10 @@ import {MatTooltipModule} from '@angular/material/tooltip';
     MatFormFieldModule,
     MatGridListModule,
     MatProgressSpinnerModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatListModule,
+    MatChipsModule,
+    MatSelectModule
   ],
 })
 export class MaterialModule { }

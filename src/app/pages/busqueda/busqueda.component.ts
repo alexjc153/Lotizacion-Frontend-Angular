@@ -12,15 +12,17 @@ import { PerfilComponent } from '../perfiles/perfil-form/perfil-form.component';
 import { Grupo } from 'src/app/models/grupo.model';
 import { GrupoComponent } from '../grupos/grupo-form/grupo-form.component';
 import { GrupoService } from '../../services/grupo/grupo.service';
+import { MatDialogConfig, MatDialog } from '@angular/material/dialog';
+import { PerfilService } from 'src/app/services/service.index';
 
 @Component({
   selector: 'app-busqueda',
   templateUrl: './busqueda.component.html',
-  styles: [
-  ]
+  styleUrls: ['./busqueda.component.css']
 })
 export class BusquedaComponent implements OnInit {
 
+  cargando = true;
   usuarios: Usuario [] = [];
   perfiles: Perfil [] = [];
   grupos: Grupo [] = [];
@@ -30,7 +32,10 @@ export class BusquedaComponent implements OnInit {
     public router: Router,
     public activatedRoute: ActivatedRoute,
     public http: HttpClient,
-    public grupoService: GrupoService
+    public grupoService: GrupoService,
+    public perfilService: PerfilService,
+
+    private dialog: MatDialog,
   ) {
     activatedRoute.params
     .subscribe( params => {
@@ -43,12 +48,14 @@ export class BusquedaComponent implements OnInit {
   }
 
   buscar( termino: string) {
+    this.cargando = true;
     const url = URL_SERVICIOS + '/busqueda/todo/' + termino;
     this.http.get(url)
     .subscribe( (resp: any) => {
       this.usuarios = resp.usuarios;
       this.perfiles = resp.perfiles;
       this.grupos = resp.grupos;
+      this.cargando = false;
     });
   }
 
@@ -69,30 +76,28 @@ export class BusquedaComponent implements OnInit {
     });
   }
 
-  editarPerfil(perfil: Perfil){
-    const modal = this.modalService.open(PerfilComponent);
-    modal.componentInstance.modoCrear = false;
-    modal.componentInstance.perfil = perfil;
+  onEditPerfil(perfil: Perfil){
 
-    modal.result.then((yes) => {
-      this.router.navigate(['/perfiles']);
-    },
-    (cancel) => {
-
-    });
+    const dialogConfig = new MatDialogConfig();
+      // dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.width = '400px';
+    dialogConfig.height = '350px';
+    this.dialog.open(PerfilComponent, dialogConfig);
+    this.perfilService.cargandoPerfil.emit(perfil);
+    this.router.navigate(['/perfiles']);
   }
 
-  editarGrupo(grupo: Grupo){
-    const modal = this.modalService.open(GrupoComponent);
-    modal.componentInstance.modoCrear = false;
-    modal.componentInstance.grupo = grupo;
+  onEditGrupo(grupo: Grupo){
 
-    modal.result.then((yes) => {
-      this.router.navigate(['/grupos']);
-    },
-    (cancel) => {
-
-    });
+    const dialogConfig = new MatDialogConfig();
+      // dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.width = '400px';
+    dialogConfig.height = '350px';
+    this.dialog.open(GrupoComponent, dialogConfig);
+    this.grupoService.cargandoGrupo.emit(grupo);
+    this.router.navigate(['/grupos']);
   }
 
 }

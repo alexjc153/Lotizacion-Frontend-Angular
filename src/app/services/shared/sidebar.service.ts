@@ -20,7 +20,8 @@ export class SidebarService {
       submenu: [
         { titulo: 'Usuarios', url: '/usuarios'},
         { titulo: 'Perfiles', url: '/perfiles'},
-        { titulo: 'Grupos', url: '/grupos'}
+        { titulo: 'Grupos', url: '/grupos'},
+        { titulo: 'Categorías', url: '/categorias'}
       ]
     }
   ];
